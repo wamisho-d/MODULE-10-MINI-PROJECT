@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Search</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <h1 class="text-center my-5">Search for a Pokémon</h1>
+        <form id="searchForm" class="mb-5">
+            <div class="form-group">
+                <input type="text" class="form-control" id="pokemonName" placeholder="Enter Pokémon Name or ID">
+            </div>
+            <button type="submit" class="btn btn-primary">Search</button>
+        </form>
+        <div id="pokemonResult" class="row">
+            <!-- Pokémon data will be inserted here -->
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('searchForm');
+        const resultContainer = document.getElementById('pokemonResult');
+
+        form.addEventListener('submit', function(event) {
+            event.preventDefault();
+            const pokemonName = document.getElementById('pokemonName').value.toLowerCase();
+
+            fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}`)
+                .then(response => response.json())
+                .then(data => {
+                    const pokemonCard = `
+                        <div class="col-md-4">
+                           <div class="card mb-4">
+                               <img src="${data.sprites.font_defualt}" class="card-img-top" alt="${data.name}">
+                               <div class="card-body">
+                                   <h5 class="card-title">${data.name}</h5>
+                                   <p class="card-text">ID: ${data.id}</p>
+                                   <a href="details.html?pokemon=${data.name}" class=btn btn-primary">View Detials</a>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    resultContainer.innerHTML = pokemonCard;
+
+                })
+                .catch(error => {
+                    resultContainer.innerHTML = `<p class="text-danger">Pokemon not found. Please try again.</p>`;
+                });
+        })
+    </script>
+</body>
+</html>
