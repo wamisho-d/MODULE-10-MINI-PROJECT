@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pokémon Details</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="index.html">Pokémon Explorer</a>
+        </div>
+    <nav>
+    
+    <div class="contianer mt-5">
+        <h1 class="text-center">Pokémon Detials</h1>
+        <div id="pokemonDetails" class="text-center"></div>
+    </div>
+           
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const pokemonId= params.get('id');
+        fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonId}`)
+            .then(response => response.json())
+            .then(data => {
+                const detailsHTML = `
+                <h2>${data.name}</h2>
+                <img src="${data.sprites.front_defualt}" alt="${data.name}">
+                <p>Abilities: ${data.abilities.map(ability => ability.ability.name).join(',')}</p>
+                <p>Types: ${data.types.map(type => type.type.name).join(',')}</p>
+                <p>Stats:</p>
+                <u1>
+                    ${data.stats.map(stat => `<li>${stat.stat.name}: ${stat.base_stat}</li>`).join('')}
+                </u1>
+            `;
+            document.getElementById('pokemonDetails').innerHTML =detailsHTML;
+
+            });
+
+    </script>
+
+</body>
+</html>
+
+               
